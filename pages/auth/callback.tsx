@@ -6,6 +6,7 @@ import Layout from '@/components/Layout';
 export default function AuthCallback() {
   const router = useRouter();
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(true);
   const { code } = router.query;
 
   useEffect(() => {
@@ -13,15 +14,30 @@ export default function AuthCallback() {
 
     const handleCallback = async () => {
       try {
-        // In production, you'd call your backend to exchange code for token
-        // For now, we'll store the code and redirect
-        localStorage.setItem('discord_code', code as string);
-        localStorage.setItem('discord_token', `token_${code}`);
+        setLoading(true);
+        
+        // Call our backend API to exchange code for token
+        const response = await fetch(`/api/auth/discord?code=${code}`);
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+          setError(data.error || 'Authentication failed');
+          return;
+        }
+
+        // Store token and user data
+        localStorage.setItem('discord_token', data.token);
+        localStorage.setItem('discord_user', JSON.stringify(data.user));
         
         // Redirect to servers page
-        router.push('/servers');
+        setTimeout(() => {
+          router.push('/servers');
+        }, 500);
       } catch (err: any) {
+        console.error('Callback error:', err);
         setError(err.message || 'Authentication failed');
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -36,13 +52,28 @@ export default function AuthCallback() {
 
       <Layout>
         <div className="min-h-[60vh] flex items-center justify-center">
-          <div className="text-center space-y-4">
-            <div className="animate-spin">
-              <div className="text-6xl">⏳</div>
-            </div>
-            <h1 className="text-2xl font-bold text-aqua">Authenticating...</h1>
-            <p className="text-gray-400">Please wait while we verify your Discord account.</p>
-            {error && <p className="text-red-500">{error}</p>}
+          <div className="text-center space-y-6">
+            {loading && !error ? (
+              <>
+                <div className="animate-spin inline-block">
+                  <div className="text-6xl">🔄</div>
+                </div>
+                <h1 className="text-3xl font-bold gradient-text">Authenticating</h1>
+                <p className="text-gray-400 text-lg">Verifying your Discord account...</p>
+              </>
+            ) : error ? (
+              <>
+                <div className="text-6xl">❌</div>
+                <h1 className="text-3xl font-bold text-red-400">Authentication Failed</h1>
+                <p className="text-gray-400 text-lg">{error}</p>
+                <button
+                  onClick={() => router.push('/login')}
+                  className="btn-primary px-8 py-3 mt-6"
+                >
+                  Try Again
+                </button>
+              </>
+            ) : null}
           </div>
         </div>
       </Layout>
