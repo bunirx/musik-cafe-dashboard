@@ -50,7 +50,6 @@ export default function ServerConfig() {
 
         // Load config from bot
         const configRes = await fetch(`/api/config/${serverId}`);
-        if (!configRes.ok) throw new Error('Failed to load config');
         const configData = await configRes.json();
         
         if (configData.config) {
@@ -74,7 +73,8 @@ export default function ServerConfig() {
         }
       } catch (err) {
         console.error('Failed to load data:', err);
-        setError('Failed to load server configuration. Please try again.');
+        // Only show error if we couldn't load the config
+        // Default config is still available for saving
       } finally {
         setLoading(false);
       }

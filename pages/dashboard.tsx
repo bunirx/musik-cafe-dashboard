@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import Link from 'next/link';
 import Layout from '@/components/Layout';
 
 export default function Dashboard() {
@@ -37,26 +38,34 @@ export default function Dashboard() {
           <div className="bg-gradient-to-br from-aqua/10 to-accent-blue/10 border border-aqua/30 rounded-2xl p-8">
             <h2 className="text-2xl font-bold text-aqua mb-6">Quick Actions</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <button className="p-4 bg-darker-blue/50 hover:bg-darker-blue border border-aqua/30 hover:border-aqua rounded-xl transition-all text-left group">
-                <div className="text-2xl mb-2">🖥️</div>
-                <h3 className="font-bold text-white group-hover:text-aqua transition-colors">View Servers</h3>
-                <p className="text-sm text-gray-400">Manage your connected servers</p>
-              </button>
-              <button className="p-4 bg-darker-blue/50 hover:bg-darker-blue border border-aqua/30 hover:border-aqua rounded-xl transition-all text-left group">
-                <div className="text-2xl mb-2">📖</div>
-                <h3 className="font-bold text-white group-hover:text-aqua transition-colors">Documentation</h3>
-                <p className="text-sm text-gray-400">Learn about all commands</p>
-              </button>
-              <button className="p-4 bg-darker-blue/50 hover:bg-darker-blue border border-aqua/30 hover:border-aqua rounded-xl transition-all text-left group">
-                <div className="text-2xl mb-2">➕</div>
-                <h3 className="font-bold text-white group-hover:text-aqua transition-colors">Add Bot</h3>
-                <p className="text-sm text-gray-400">Invite bot to new server</p>
-              </button>
-              <button className="p-4 bg-darker-blue/50 hover:bg-darker-blue border border-aqua/30 hover:border-aqua rounded-xl transition-all text-left group">
-                <div className="text-2xl mb-2">💬</div>
-                <h3 className="font-bold text-white group-hover:text-aqua transition-colors">Join Discord</h3>
-                <p className="text-sm text-gray-400">Get support from the community</p>
-              </button>
+              <Link href="/servers">
+                <div className="p-4 bg-darker-blue/50 hover:bg-darker-blue border border-aqua/30 hover:border-aqua rounded-xl transition-all text-left group cursor-pointer">
+                  <div className="text-2xl mb-2">🖥️</div>
+                  <h3 className="font-bold text-white group-hover:text-aqua transition-colors">View Servers</h3>
+                  <p className="text-sm text-gray-400">Manage your connected servers</p>
+                </div>
+              </Link>
+              <Link href="/documentation">
+                <div className="p-4 bg-darker-blue/50 hover:bg-darker-blue border border-aqua/30 hover:border-aqua rounded-xl transition-all text-left group cursor-pointer">
+                  <div className="text-2xl mb-2">📖</div>
+                  <h3 className="font-bold text-white group-hover:text-aqua transition-colors">Documentation</h3>
+                  <p className="text-sm text-gray-400">Learn about all commands</p>
+                </div>
+              </Link>
+              <Link href="/add">
+                <div className="p-4 bg-darker-blue/50 hover:bg-darker-blue border border-aqua/30 hover:border-aqua rounded-xl transition-all text-left group cursor-pointer">
+                  <div className="text-2xl mb-2">➕</div>
+                  <h3 className="font-bold text-white group-hover:text-aqua transition-colors">Add Bot</h3>
+                  <p className="text-sm text-gray-400">Invite bot to new server</p>
+                </div>
+              </Link>
+              <a href="https://discord.gg/d8uuYBf7Nh" target="_blank" rel="noopener noreferrer">
+                <div className="p-4 bg-darker-blue/50 hover:bg-darker-blue border border-aqua/30 hover:border-aqua rounded-xl transition-all text-left group cursor-pointer">
+                  <div className="text-2xl mb-2">💬</div>
+                  <h3 className="font-bold text-white group-hover:text-aqua transition-colors">Join Discord</h3>
+                  <p className="text-sm text-gray-400">Get support from the community</p>
+                </div>
+              </a>
             </div>
           </div>
 
