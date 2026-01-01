@@ -27,7 +27,12 @@ export default async function handler(
     });
 
     if (!response.ok) {
-      return res.status(response.status).json({ error: 'Failed to fetch server data from bot' });
+      // If bot API fails, return empty arrays so modal can still open
+      return res.status(200).json({
+        success: false,
+        channels: [],
+        roles: [],
+      });
     }
 
     const data = await response.json();

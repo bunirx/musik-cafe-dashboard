@@ -389,35 +389,39 @@ export default function ServerConfig() {
               </div>
 
               {/* Voice Channels */}
-              {config.voiceChannels.length > 0 && (
-                <div className="bg-gradient-to-br from-aqua/10 to-accent-blue/10 border border-aqua/30 rounded-2xl p-6">
-                  <h2 className="text-xl font-bold text-aqua mb-4">🎙️ Voice Channels</h2>
-                  <div className="space-y-2">
-                    {config.voiceChannels.map((channelId) => {
-                      const channel = serverData.channels.find(c => c.id === channelId);
-                      return (
-                        <div
-                          key={channelId}
-                          className="flex items-center justify-between bg-darker-blue/50 px-4 py-2 rounded-xl"
-                        >
-                          <span className="text-gray-300">{channel?.name || channelId}</span>
-                          <button
-                            onClick={() =>
-                              setConfig({
-                                ...config,
-                                voiceChannels: config.voiceChannels.filter((c) => c !== channelId),
-                              })
-                            }
-                            className="text-red-500 hover:text-red-400 transition-colors"
+              <div className="bg-gradient-to-br from-aqua/10 to-accent-blue/10 border border-aqua/30 rounded-2xl p-6">
+                <h2 className="text-xl font-bold text-aqua mb-4">🎙️ Voice Channels</h2>
+                <div className="space-y-3">
+                  {config.voiceChannels.length > 0 ? (
+                    <div className="space-y-2">
+                      {config.voiceChannels.map((channelId) => {
+                        const channel = serverData.channels.find(c => c.id === channelId);
+                        return (
+                          <div
+                            key={channelId}
+                            className="flex items-center justify-between bg-darker-blue/50 px-4 py-2 rounded-xl"
                           >
-                            ✕
-                          </button>
-                        </div>
-                      );
-                    })}
-                  </div>
+                            <span className="text-gray-300">🎙️ {channel?.name || channelId}</span>
+                            <button
+                              onClick={() =>
+                                setConfig({
+                                  ...config,
+                                  voiceChannels: config.voiceChannels.filter((c) => c !== channelId),
+                                })
+                              }
+                              className="text-red-500 hover:text-red-400 transition-colors"
+                            >
+                              ✕
+                            </button>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    <p className="text-gray-400 text-sm">Bot can use all voice channels</p>
+                  )}
                 </div>
-              )}
+              </div>
             </div>
           )}
 
@@ -435,21 +439,28 @@ export default function ServerConfig() {
             <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
               <div className="bg-darker-blue border border-aqua/30 rounded-2xl p-6 max-w-md w-full max-h-96 overflow-y-auto">
                 <h3 className="text-xl font-bold text-aqua mb-4">Select Channels</h3>
-                <div className="space-y-2">
-                  {serverData.channels.map((channel) => (
-                    <label key={channel.id} className="flex items-center gap-3 cursor-pointer p-3 hover:bg-darker-blue/50 rounded-lg transition-colors">
-                      <input
-                        type="checkbox"
-                        checked={selectedChannels.has(channel.id)}
-                        onChange={() => handleChannelSelect(channel.id)}
-                        className="w-4 h-4 rounded accent-aqua"
-                      />
-                      <span className="text-gray-300">
-                        {channel.type === 'voice' ? '🎙️' : '#'} {channel.name}
-                      </span>
-                    </label>
-                  ))}
-                </div>
+                {serverData.channels.length === 0 ? (
+                  <div className="text-center py-8">
+                    <p className="text-gray-400 mb-3">No channels found</p>
+                    <p className="text-xs text-gray-500">Make sure the bot has access to your server</p>
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    {serverData.channels.map((channel) => (
+                      <label key={channel.id} className="flex items-center gap-3 cursor-pointer p-3 hover:bg-darker-blue/50 rounded-lg transition-colors">
+                        <input
+                          type="checkbox"
+                          checked={selectedChannels.has(channel.id)}
+                          onChange={() => handleChannelSelect(channel.id)}
+                          className="w-4 h-4 rounded accent-aqua"
+                        />
+                        <span className="text-gray-300">
+                          {channel.type === 'voice' ? '🎙️' : '#'} {channel.name}
+                        </span>
+                      </label>
+                    ))}
+                  </div>
+                )}
                 <div className="flex gap-3 mt-6">
                   <button
                     onClick={() => setShowChannelModal(false)}
@@ -473,19 +484,26 @@ export default function ServerConfig() {
             <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
               <div className="bg-darker-blue border border-aqua/30 rounded-2xl p-6 max-w-md w-full max-h-96 overflow-y-auto">
                 <h3 className="text-xl font-bold text-aqua mb-4">Select DJ Roles</h3>
-                <div className="space-y-2">
-                  {serverData.roles.map((role) => (
-                    <label key={role.id} className="flex items-center gap-3 cursor-pointer p-3 hover:bg-darker-blue/50 rounded-lg transition-colors">
-                      <input
-                        type="checkbox"
-                        checked={selectedRoles.has(role.id)}
-                        onChange={() => handleRoleSelect(role.id)}
-                        className="w-4 h-4 rounded accent-aqua"
-                      />
-                      <span className="text-gray-300">@{role.name}</span>
-                    </label>
-                  ))}
-                </div>
+                {serverData.roles.length === 0 && !showCreateRole ? (
+                  <div className="text-center py-8">
+                    <p className="text-gray-400 mb-3">No roles found</p>
+                    <p className="text-xs text-gray-500">Create a new role or check bot permissions</p>
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    {serverData.roles.map((role) => (
+                      <label key={role.id} className="flex items-center gap-3 cursor-pointer p-3 hover:bg-darker-blue/50 rounded-lg transition-colors">
+                        <input
+                          type="checkbox"
+                          checked={selectedRoles.has(role.id)}
+                          onChange={() => handleRoleSelect(role.id)}
+                          className="w-4 h-4 rounded accent-aqua"
+                        />
+                        <span className="text-gray-300">@{role.name}</span>
+                      </label>
+                    ))}
+                  </div>
+                )}
                 {!showCreateRole && (
                   <button
                     onClick={() => setShowCreateRole(true)}
