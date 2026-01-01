@@ -401,7 +401,7 @@ export default function ServerConfig() {
                             key={channelId}
                             className="flex items-center justify-between bg-darker-blue/50 px-4 py-2 rounded-xl"
                           >
-                            <span className="text-gray-300">🎙️ {channel?.name || channelId}</span>
+                            <span className="text-gray-300">{channel?.name || channelId}</span>
                             <button
                               onClick={() =>
                                 setConfig({
@@ -418,8 +418,17 @@ export default function ServerConfig() {
                       })}
                     </div>
                   ) : (
-                    <p className="text-gray-400 text-sm">Bot can use all voice channels</p>
+                    <p className="text-gray-400 text-sm">No voice channels restricted (all can be used)</p>
                   )}
+                  <button
+                    onClick={() => {
+                      setSelectedChannels(new Set([...config.musicChannels, ...config.voiceChannels]));
+                      setShowChannelModal(true);
+                    }}
+                    className="w-full mt-4 py-2 bg-accent-blue/20 border border-accent-blue text-accent-blue rounded-xl hover:bg-accent-blue/30 transition-colors"
+                  >
+                    + Select Voice Channels
+                  </button>
                 </div>
               </div>
             </div>
@@ -441,8 +450,8 @@ export default function ServerConfig() {
                 <h3 className="text-xl font-bold text-aqua mb-4">Select Channels</h3>
                 {serverData.channels.length === 0 ? (
                   <div className="text-center py-8">
-                    <p className="text-gray-400 mb-3">No channels found</p>
-                    <p className="text-xs text-gray-500">Make sure the bot has access to your server</p>
+                    <p className="text-gray-400 mb-2">No channels found</p>
+                    <p className="text-xs text-gray-500">Make sure the bot API is running and properly connected</p>
                   </div>
                 ) : (
                   <div className="space-y-2">
@@ -484,10 +493,10 @@ export default function ServerConfig() {
             <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
               <div className="bg-darker-blue border border-aqua/30 rounded-2xl p-6 max-w-md w-full max-h-96 overflow-y-auto">
                 <h3 className="text-xl font-bold text-aqua mb-4">Select DJ Roles</h3>
-                {serverData.roles.length === 0 && !showCreateRole ? (
+                {serverData.roles.length === 0 ? (
                   <div className="text-center py-8">
-                    <p className="text-gray-400 mb-3">No roles found</p>
-                    <p className="text-xs text-gray-500">Create a new role or check bot permissions</p>
+                    <p className="text-gray-400 mb-2">No roles found</p>
+                    <p className="text-xs text-gray-500">Make sure the bot API is running and properly connected</p>
                   </div>
                 ) : (
                   <div className="space-y-2">
