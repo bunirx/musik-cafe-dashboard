@@ -17,6 +17,7 @@ export default function Servers() {
   const [servers, setServers] = useState<Guild[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [userName, setUserName] = useState('');
 
   useEffect(() => {
     const token = localStorage.getItem('discord_token');
@@ -25,28 +26,20 @@ export default function Servers() {
       return;
     }
 
-    // Mock data - in production, fetch from your backend
-    const mockServers: Guild[] = [
-      {
-        id: '123456789',
-        name: 'Chill Vibes Server',
-        icon: '🎵',
-        owner: true,
-        permissions: 8,
-      },
-      {
-        id: '987654321',
-        name: 'Gaming Hub',
-        icon: '🎮',
-        owner: false,
-        permissions: 8,
-      },
-    ];
+    // Get actual user data from localStorage
+    const userData = localStorage.getItem('discord_user');
+    if (userData) {
+      try {
+        const user = JSON.parse(userData);
+        setUserName(user.username || 'User');
+        setServers(user.guilds || []);
+      } catch (err) {
+        console.error('Error parsing user data:', err);
+        setError('Failed to load user data');
+      }
+    }
 
-    setTimeout(() => {
-      setServers(mockServers);
-      setLoading(false);
-    }, 500);
+    setLoading(false);
   }, [router]);
 
   if (loading) {
@@ -75,8 +68,11 @@ export default function Servers() {
 
       <Layout>
         <div className="space-y-8">
-          <div className="text-center space-y-2 mb-8">
+          <div className="text-center space-y-4 mb-12">
             <h1 className="text-4xl font-bold gradient-text">Your Servers</h1>
+            <p className="text-gray-400 text-lg">
+              Welcome, <span className="text-aqua font-bold">{userName}</span>
+            </p>
             <p className="text-gray-400">Select a server to configure your bot</p>
           </div>
 
@@ -87,43 +83,79 @@ export default function Servers() {
           )}
 
           {servers.length === 0 ? (
-            <div className="text-center py-20 space-y-4">
+            <div className="text-center py-20 space-y-6">
+              <div className="text-6xl">🚫</div>
               <p className="text-xl text-gray-400">
                 No servers found where you have admin access.
               </p>
+              <p className="text-gray-500">
+                You need to be an admin or owner of a server to manage it.
+              </p>
               <Link href="/add">
-                <button className="px-6 py-3 bg-gradient-to-r from-aqua to-accent-blue text-white font-bold rounded-2xl hover:shadow-lg hover:shadow-aqua/50">
-                  Add Bot to a Server
+                <button className="btn-primary px-8 py-3 text-lg">
+                  ➕ Add Bot to a Server
                 </button>
               </Link>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {servers.map((server) => (
-                <Link key={server.id} href={`/${server.id}/config`}>
-                  <div className="bg-gradient-to-br from-aqua/10 to-accent-blue/10 border border-aqua/30 rounded-2xl p-6 cursor-pointer hover:border-aqua/60 hover:shadow-lg hover:shadow-aqua/20 transition-all duration-300 group">
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="text-4xl group-hover:scale-110 transition-transform">
-                        {server.icon}
+            <div className="space-y-4">
+              <div className="text-gray-400 text-sm">
+                Found <span className="text-aqua font-bold">{servers.length}</span> server{servers.length !== 1 ? 's' : ''}
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {servers.map((server) => {
+                  // Generate a default icon if none exists
+                  const initials = server.name
+                    .split(' ')
+                    .map((word) => word[0])
+                    .join('')
+                    .toUpperCase()
+                    .slice(0, 2);
+
+                  return (
+                    <Link key={server.id} href={`/${server.id}/config`}>
+                      <div className="card group cursor-pointer border-aqua/40 hover:aqua-glow">
+                        <div className="flex items-start justify-between mb-6">
+                          <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-aqua to-accent-blue flex items-center justify-center text-white font-bold text-lg group-hover:scale-110 transition-transform">
+                            {server.icon ? (
+                              <img
+                                src={`https://cdn.discordapp.com/icons/${server.id}/${server.icon}.png`}
+                                alt={server.name}
+                                className="w-full h-full rounded-xl object-cover"
+                              />
+                            ) : (
+                              initials
+                            )}
+                          </div>
+                          {server.owner && (
+                            <span className="px-3 py-1 bg-gradient-to-r from-aqua to-accent-blue text-white rounded-full text-xs font-bold">
+                              OWNER
+                            </span>
+                          )}
+                        </div>
+                        <h3 className="text-xl font-bold text-white mb-3 group-hover:text-aqua transition-colors line-clamp-2">
+                          {server.name}
+                        </h3>
+                        <p className="text-sm text-gray-400 mb-6 font-mono">
+                          ID: {server.id}
+                        </p>
+                        <button className="w-full py-3 bg-gradient-to-r from-aqua/20 to-accent-blue/20 border border-aqua/50 text-aqua font-bold rounded-xl group-hover:from-aqua group-hover:to-accent-blue group-hover:text-white group-hover:border-aqua transition-all duration-300">
+                          ⚙️ Configure
+                        </button>
                       </div>
-                      {server.owner && (
-                        <span className="px-3 py-1 bg-aqua/20 text-aqua rounded-full text-xs font-bold">
-                          OWNER
-                        </span>
-                      )}
-                    </div>
-                    <h3 className="text-lg font-bold text-white mb-2 group-hover:text-aqua transition-colors">
-                      {server.name}
-                    </h3>
-                    <p className="text-sm text-gray-400 mb-4">
-                      Server ID: {server.id}
-                    </p>
-                    <button className="w-full py-2 bg-gradient-to-r from-aqua/20 to-accent-blue/20 border border-aqua/50 text-aqua font-bold rounded-xl group-hover:from-aqua group-hover:to-accent-blue group-hover:text-white transition-all duration-300">
-                      Configure
-                    </button>
-                  </div>
-                </Link>
-              ))}
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {servers.length > 0 && (
+            <div className="card border-accent-blue/40 mt-12">
+              <h3 className="text-lg font-bold text-accent-blue mb-4">💡 Tip</h3>
+              <p className="text-gray-400">
+                Click on any server to configure the bot settings including volume, prefix, DJ roles, and music channels.
+              </p>
             </div>
           )}
         </div>
