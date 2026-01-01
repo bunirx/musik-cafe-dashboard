@@ -34,11 +34,13 @@ export default function ServerConfig() {
 
   // Modal states
   const [showChannelModal, setShowChannelModal] = useState(false);
+  const [channelModalType, setChannelModalType] = useState<'text' | 'voice'>('text');
   const [showRoleModal, setShowRoleModal] = useState(false);
   const [selectedChannels, setSelectedChannels] = useState<Set<string>>(new Set());
   const [selectedRoles, setSelectedRoles] = useState<Set<string>>(new Set());
   const [showCreateRole, setShowCreateRole] = useState(false);
   const [newRoleName, setNewRoleName] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     if (!serverId) return;
@@ -197,11 +199,12 @@ export default function ServerConfig() {
       if (response.ok) {
         const data = await response.json();
         if (data.role) {
-          // Add the new role to server data and to DJ roles
+          // Add the new role to server data
           setServerData({
             ...serverData,
             roles: [...serverData.roles, data.role],
           });
+          // Automatically add the new role to DJ roles (don't save yet - user will click save)
           setConfig({
             ...config,
             djRoles: [...config.djRoles, data.role.id],
@@ -378,7 +381,8 @@ export default function ServerConfig() {
                   )}
                   <button
                     onClick={() => {
-                      setSelectedChannels(new Set([...config.musicChannels, ...config.voiceChannels]));
+                      setChannelModalType('text');
+                      setSelectedChannels(new Set(config.musicChannels));
                       setShowChannelModal(true);
                     }}
                     className="w-full mt-4 py-2 bg-accent-blue/20 border border-accent-blue text-accent-blue rounded-xl hover:bg-accent-blue/30 transition-colors"
@@ -422,7 +426,8 @@ export default function ServerConfig() {
                   )}
                   <button
                     onClick={() => {
-                      setSelectedChannels(new Set([...config.musicChannels, ...config.voiceChannels]));
+                      setChannelModalType('voice');
+                      setSelectedChannels(new Set(config.voiceChannels));
                       setShowChannelModal(true);
                     }}
                     className="w-full mt-4 py-2 bg-accent-blue/20 border border-accent-blue text-accent-blue rounded-xl hover:bg-accent-blue/30 transition-colors"
@@ -446,33 +451,63 @@ export default function ServerConfig() {
           {/* Channel Selection Modal */}
           {showChannelModal && (
             <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-              <div className="bg-darker-blue border border-aqua/30 rounded-2xl p-6 max-w-md w-full max-h-96 overflow-y-auto">
-                <h3 className="text-xl font-bold text-aqua mb-4">Select Channels</h3>
-                {serverData.channels.length === 0 ? (
-                  <div className="text-center py-8">
-                    <p className="text-gray-400 mb-2">No channels found</p>
-                    <p className="text-xs text-gray-500">Make sure the bot API is running and properly connected</p>
-                  </div>
-                ) : (
-                  <div className="space-y-2">
-                    {serverData.channels.map((channel) => (
-                      <label key={channel.id} className="flex items-center gap-3 cursor-pointer p-3 hover:bg-darker-blue/50 rounded-lg transition-colors">
-                        <input
-                          type="checkbox"
-                          checked={selectedChannels.has(channel.id)}
-                          onChange={() => handleChannelSelect(channel.id)}
-                          className="w-4 h-4 rounded accent-aqua"
-                        />
-                        <span className="text-gray-300">
-                          {channel.type === 'voice' ? '🎙️' : '#'} {channel.name}
-                        </span>
-                      </label>
-                    ))}
-                  </div>
-                )}
+              <div className="bg-darker-blue border border-aqua/30 rounded-2xl p-6 max-w-md w-full max-h-96 flex flex-col">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-xl font-bold text-aqua">
+                    Select {channelModalType === 'text' ? 'Text' : 'Voice'} Channels
+                  </h3>
+                  <button
+                    onClick={() => {
+                      setShowChannelModal(false);
+                      setSearchQuery('');
+                    }}
+                    className="text-gray-400 hover:text-aqua text-2xl"
+                  >
+                    ✕
+                  </button>
+                </div>
+                
+                <input
+                  type="text"
+                  placeholder="Search channels..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="mb-4 px-3 py-2 bg-darker-blue border border-aqua/30 rounded-lg text-white focus:border-aqua focus:outline-none"
+                />
+
+                <div className="overflow-y-auto flex-1">
+                  {serverData.channels.length === 0 ? (
+                    <div className="text-center py-8">
+                      <p className="text-gray-400 mb-2">No channels found</p>
+                      <p className="text-xs text-gray-500">Make sure the bot API is running and properly connected</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-2">
+                      {serverData.channels
+                        .filter(c => c.type === channelModalType && c.name.toLowerCase().includes(searchQuery.toLowerCase()))
+                        .map((channel) => (
+                          <label key={channel.id} className="flex items-center gap-3 cursor-pointer p-3 hover:bg-darker-blue/50 rounded-lg transition-colors">
+                            <input
+                              type="checkbox"
+                              checked={selectedChannels.has(channel.id)}
+                              onChange={() => handleChannelSelect(channel.id)}
+                              className="w-4 h-4 rounded accent-aqua"
+                            />
+                            <span className="text-gray-300">
+                              {channelModalType === 'text' ? '#' : '🎙️'} {channel.name}
+                            </span>
+                          </label>
+                        ))}
+                    </div>
+                  )}
+                </div>
+
                 <div className="flex gap-3 mt-6">
                   <button
-                    onClick={() => setShowChannelModal(false)}
+                    onClick={() => {
+                      setShowChannelModal(false);
+                      setSearchQuery('');
+                    }}
                     className="flex-1 py-2 bg-darker-blue border border-gray-600 text-gray-300 rounded-xl hover:border-gray-400 transition-colors"
                   >
                     Cancel
@@ -491,28 +526,53 @@ export default function ServerConfig() {
           {/* Role Selection Modal */}
           {showRoleModal && (
             <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-              <div className="bg-darker-blue border border-aqua/30 rounded-2xl p-6 max-w-md w-full max-h-96 overflow-y-auto">
-                <h3 className="text-xl font-bold text-aqua mb-4">Select DJ Roles</h3>
-                {serverData.roles.length === 0 ? (
-                  <div className="text-center py-8">
-                    <p className="text-gray-400 mb-2">No roles found</p>
-                    <p className="text-xs text-gray-500">Make sure the bot API is running and properly connected</p>
-                  </div>
-                ) : (
-                  <div className="space-y-2">
-                    {serverData.roles.map((role) => (
-                      <label key={role.id} className="flex items-center gap-3 cursor-pointer p-3 hover:bg-darker-blue/50 rounded-lg transition-colors">
-                        <input
-                          type="checkbox"
-                          checked={selectedRoles.has(role.id)}
-                          onChange={() => handleRoleSelect(role.id)}
-                          className="w-4 h-4 rounded accent-aqua"
-                        />
-                        <span className="text-gray-300">@{role.name}</span>
-                      </label>
-                    ))}
-                  </div>
-                )}
+              <div className="bg-darker-blue border border-aqua/30 rounded-2xl p-6 max-w-md w-full max-h-96 flex flex-col">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-xl font-bold text-aqua">Select DJ Roles</h3>
+                  <button
+                    onClick={() => {
+                      setShowRoleModal(false);
+                      setSearchQuery('');
+                    }}
+                    className="text-gray-400 hover:text-aqua text-2xl"
+                  >
+                    ✕
+                  </button>
+                </div>
+                
+                <input
+                  type="text"
+                  placeholder="Search roles..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="mb-4 px-3 py-2 bg-darker-blue border border-aqua/30 rounded-lg text-white focus:border-aqua focus:outline-none"
+                />
+
+                <div className="overflow-y-auto flex-1">
+                  {serverData.roles.length === 0 ? (
+                    <div className="text-center py-8">
+                      <p className="text-gray-400 mb-2">No roles found</p>
+                      <p className="text-xs text-gray-500">Make sure the bot API is running and properly connected</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-2">
+                      {serverData.roles
+                        .filter(r => r.name.toLowerCase().includes(searchQuery.toLowerCase()))
+                        .map((role) => (
+                          <label key={role.id} className="flex items-center gap-3 cursor-pointer p-3 hover:bg-darker-blue/50 rounded-lg transition-colors">
+                            <input
+                              type="checkbox"
+                              checked={selectedRoles.has(role.id)}
+                              onChange={() => handleRoleSelect(role.id)}
+                              className="w-4 h-4 rounded accent-aqua"
+                            />
+                            <span className="text-gray-300">@{role.name}</span>
+                          </label>
+                        ))}
+                    </div>
+                  )}
+                </div>
+
                 {!showCreateRole && (
                   <button
                     onClick={() => setShowCreateRole(true)}
@@ -550,9 +610,13 @@ export default function ServerConfig() {
                     </div>
                   </div>
                 )}
+
                 <div className="flex gap-3 mt-6">
                   <button
-                    onClick={() => setShowRoleModal(false)}
+                    onClick={() => {
+                      setShowRoleModal(false);
+                      setSearchQuery('');
+                    }}
                     className="flex-1 py-2 bg-darker-blue border border-gray-600 text-gray-300 rounded-xl hover:border-gray-400 transition-colors"
                   >
                     Cancel
