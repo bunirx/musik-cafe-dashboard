@@ -3,7 +3,7 @@ import Layout from '@/components/Layout';
 import UserMenu from '@/components/UserMenu';
 
 export default function Add() {
-  const botInviteUrl = `https://discord.com/oauth2/authorize?client_id=1455917162270294091&scope=bot%20applications.commands&permissions=40134627069312`;
+  const botInviteUrl = `https://discord.com/oauth2/authorize?client_id=1455917162270294091&scope=bot%20applications.commands&permissions=4539334060756224`;
 
   return (
     <>
