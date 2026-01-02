@@ -27,7 +27,11 @@ export default function ServerConfig() {
     voiceChannels: [],
   });
   const [serverData, setServerData] = useState<ServerData>({ channels: [], roles: [] });
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
   const [savedFading, setSavedFading] = useState(false);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (saved) {
@@ -44,7 +48,6 @@ export default function ServerConfig() {
       };
     }
   }, [saved]);
-  const [loading, setLoading] = useState(true);
 
   // Modal states
   const [showChannelModal, setShowChannelModal] = useState(false);
