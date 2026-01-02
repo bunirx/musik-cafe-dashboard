@@ -32,7 +32,20 @@ export default function Servers() {
       try {
         const user = JSON.parse(userData);
         setUserName(user.username || 'User');
-        const sortedServers = (user.guilds || []).sort((a: Guild, b: Guild) => a.name.localeCompare(b.name));
+        const sortedServers = (user.guilds || []).sort((a: Guild, b: Guild) => {
+          // Custom sort: numbers first, then alphabets
+          const aFirstChar = a.name[0] || '';
+          const bFirstChar = b.name[0] || '';
+          const aIsNumber = /\d/.test(aFirstChar);
+          const bIsNumber = /\d/.test(bFirstChar);
+          
+          // If one starts with number and other with letter, number comes first
+          if (aIsNumber && !bIsNumber) return -1;
+          if (!aIsNumber && bIsNumber) return 1;
+          
+          // Both same type, use alphabetical order
+          return a.name.localeCompare(b.name);
+        });
         setServers(sortedServers);
       } catch (err) {
         console.error('Error parsing user data:', err);
