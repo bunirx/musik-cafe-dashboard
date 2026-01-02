@@ -27,9 +27,23 @@ export default function ServerConfig() {
     voiceChannels: [],
   });
   const [serverData, setServerData] = useState<ServerData>({ channels: [], roles: [] });
-  const [saving, setSaving] = useState(false);
-  const [saved, setSaved] = useState(false);
-  const [error, setError] = useState('');
+  const [savedFading, setSavedFading] = useState(false);
+
+  useEffect(() => {
+    if (saved) {
+      const timer = setTimeout(() => {
+        setSavedFading(true);
+      }, 3000);
+      const fadeTimer = setTimeout(() => {
+        setSaved(false);
+        setSavedFading(false);
+      }, 4000);
+      return () => {
+        clearTimeout(timer);
+        clearTimeout(fadeTimer);
+      };
+    }
+  }, [saved]);
   const [loading, setLoading] = useState(true);
 
   // Modal states
@@ -465,7 +479,9 @@ export default function ServerConfig() {
           </button>
 
           {saved && (
-            <div className="bg-green-500/20 border border-green-500 rounded-2xl p-4 text-green-300 flex items-center gap-3">
+            <div className={`bg-green-500/20 border border-green-500 rounded-2xl p-4 text-green-300 flex items-center gap-3 transition-opacity duration-1000 ${
+              savedFading ? 'opacity-0' : 'opacity-100'
+            }`}>
               <span>✅</span>
               <span>Configuration saved successfully! Changes will take effect on the bot shortly.</span>
             </div>
