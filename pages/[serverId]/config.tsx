@@ -54,25 +54,24 @@ export default function ServerConfig() {
         const configRes = await fetch(`/api/config/${serverId}`);
         const configData = await configRes.json();
         
-        console.log('Loaded config:', configData);
+        // Support both wrapped and unwrapped responses
+        const configObj = configData.config || configData;
         
-        if (configData.config) {
+        if (configObj) {
           // Convert volume from percentage (0-100) to decimal (0-1) if needed
-          let volume = configData.config.default_volume || configData.config.defaultVolume || 0.6;
+          let volume = configObj.default_volume || configObj.defaultVolume || 0.6;
           // If volume is greater than 1, it's stored as percentage, convert to decimal
           if (volume > 1) {
             volume = volume / 100;
           }
           
-          const djRoles = configData.config.dj_roles || configData.config.djRoles || [];
-          const musicChannels = configData.config.music_channels || configData.config.musicChannels || [];
-          const voiceChannels = configData.config.voice_channels || configData.config.voiceChannels || [];
-          
-          console.log('Setting config with:', { djRoles, musicChannels, voiceChannels });
+          const djRoles = configObj.dj_roles || configObj.djRoles || [];
+          const musicChannels = configObj.music_channels || configObj.musicChannels || [];
+          const voiceChannels = configObj.voice_channels || configObj.voiceChannels || [];
           
           setConfig({
             defaultVolume: volume,
-            defaultPrefix: configData.config.default_prefix || configData.config.defaultPrefix || '.',
+            defaultPrefix: configObj.default_prefix || configObj.defaultPrefix || '.',
             djRoles: Array.isArray(djRoles) ? djRoles : [],
             musicChannels: Array.isArray(musicChannels) ? musicChannels : [],
             voiceChannels: Array.isArray(voiceChannels) ? voiceChannels : [],
@@ -84,7 +83,6 @@ export default function ServerConfig() {
           const serverRes = await fetch(`/api/server/${serverId}`);
           if (serverRes.ok) {
             const data = await serverRes.json();
-            console.log('Loaded server data:', data);
             setServerData({
               channels: data.channels || [],
               roles: data.roles || [],
@@ -335,10 +333,7 @@ export default function ServerConfig() {
                   {config.djRoles && config.djRoles.length > 0 ? (
                     <div className="space-y-2">
                       {config.djRoles.map((roleId) => {
-                        const role = serverData.roles.find(r => {
-                          console.log(`Matching roleId=${roleId} (type: ${typeof roleId}) against r.id=${r.id} (type: ${typeof r.id})`, r.id === roleId);
-                          return r.id === roleId;
-                        });
+                        const role = serverData.roles.find(r => r.id === roleId);
                         return (
                           <div
                             key={roleId}
