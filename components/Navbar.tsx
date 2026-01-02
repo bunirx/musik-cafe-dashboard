@@ -24,8 +24,8 @@ export default function Navbar() {
           {/* Logo */}
           <Link href="/">
             <div className="flex items-center gap-3 cursor-pointer group">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-aqua to-accent-blue flex items-center justify-center shadow-lg">
-                <span className="text-white font-black text-xl">🎵</span>
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-aqua to-accent-blue flex items-center justify-center shadow-lg overflow-hidden">
+                <img src="/logo.png" alt="Musik Cafe" className="w-full h-full object-cover rounded-lg" />
               </div>
               <div className="hidden sm:block">
                 <p className="text-sm font-semibold text-gray-400">MUSIK CAFE</p>

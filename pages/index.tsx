@@ -10,6 +10,8 @@ const Home: NextPage = () => {
         <title>Musik Cafe - Discord Music Bot Dashboard</title>
         <meta name="description" content="Manage your Musik Cafe bot with our powerful dashboard" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" />
+        <link rel="shortcut icon" href="/logo.png" />
       </Head>
 
       <Layout>
