@@ -16,6 +16,7 @@ interface User {
   username: string;
   avatar: string | null;
   id: string;
+  guilds: Guild[];
 }
 
 export default function Servers() {
