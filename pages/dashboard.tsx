@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import Layout from '@/components/Layout';
+import UserMenu from '@/components/UserMenu';
 
 export default function Dashboard() {
   return (
@@ -11,9 +12,14 @@ export default function Dashboard() {
 
       <Layout>
         <div className="space-y-8">
-          <div className="text-center space-y-2 mb-12">
+          <div className="text-center space-y-2 mb-12 relative pb-12">
             <h1 className="text-4xl font-bold gradient-text">Dashboard</h1>
             <p className="text-gray-400">Main hub for bot management and statistics</p>
+            
+            {/* User Menu - Below Title */}
+            <div className="flex justify-center pt-4">
+              <UserMenu />
+            </div>
           </div>
 
           {/* Stats Grid */}

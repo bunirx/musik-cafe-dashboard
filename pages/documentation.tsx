@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import Layout from '@/components/Layout';
+import UserMenu from '@/components/UserMenu';
 import { SOCIAL_LINKS } from '@/config';
 
 export default function Documentation() {
@@ -12,9 +13,14 @@ export default function Documentation() {
       <Layout>
         <div className="max-w-4xl mx-auto space-y-12">
           {/* Header */}
-          <div className="text-center space-y-3 mb-12">
+          <div className="text-center space-y-3 mb-12 relative pb-12">
             <h1 className="text-5xl font-bold gradient-text">Documentation</h1>
             <p className="text-xl text-gray-400">Complete guide to Musik Cafe</p>
+            
+            {/* User Menu - Below Title */}
+            <div className="flex justify-center pt-4">
+              <UserMenu />
+            </div>
           </div>
 
           {/* Getting Started */}
