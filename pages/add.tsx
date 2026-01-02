@@ -9,7 +9,7 @@ export default function Add() {
     <>
       <Head>
         <title>Add Bot - Musik Cafe</title>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/banana.png?v=2" />
       </Head>
 
       <Layout>

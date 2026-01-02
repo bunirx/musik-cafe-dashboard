@@ -9,8 +9,8 @@ export default function Footer() {
           {/* Brand */}
           <div className="space-y-4">
             <div className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-aqua to-accent-blue flex items-center justify-center overflow-hidden">
-                <img src="/logo.png" alt="Musik Cafe" className="w-7 h-7 object-cover rounded" />
+              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-aqua to-accent-blue flex items-center justify-center overflow-hidden flex-shrink-0">
+                <img src="/banana.png" alt="Musik Cafe" className="w-full h-full object-cover" />
               </div>
               <span className="font-black gradient-text text-lg">MUSIK CAFE</span>
             </div>
