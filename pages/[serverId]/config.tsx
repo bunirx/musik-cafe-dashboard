@@ -71,14 +71,18 @@ export default function ServerConfig() {
           });
         }
 
-        // Load server channels and roles
-        const serverRes = await fetch(`/api/server/${serverId}`);
-        if (serverRes.ok) {
-          const data = await serverRes.json();
-          setServerData({
-            channels: data.channels || [],
-            roles: data.roles || [],
-          });
+        // Load server channels and roles - MUST happen before setLoading(false)
+        try {
+          const serverRes = await fetch(`/api/server/${serverId}`);
+          if (serverRes.ok) {
+            const data = await serverRes.json();
+            setServerData({
+              channels: data.channels || [],
+              roles: data.roles || [],
+            });
+          }
+        } catch (serverErr) {
+          console.error('Failed to load server data:', serverErr);
         }
       } catch (err) {
         console.error('Failed to load data:', err);
