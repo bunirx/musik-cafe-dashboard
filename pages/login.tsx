@@ -27,6 +27,7 @@ export default function Login() {
     <>
       <Head>
         <title>Login - Musik Cafe Dashboard</title>
+        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <Layout>

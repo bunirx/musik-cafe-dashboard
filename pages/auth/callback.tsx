@@ -48,6 +48,7 @@ export default function AuthCallback() {
     <>
       <Head>
         <title>Authenticating...</title>
+        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <Layout>

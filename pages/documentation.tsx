@@ -8,6 +8,7 @@ export default function Documentation() {
     <>
       <Head>
         <title>Documentation - Musik Cafe</title>
+        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <Layout>

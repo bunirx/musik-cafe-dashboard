@@ -69,6 +69,7 @@ export default function Servers() {
       <>
         <Head>
           <title>Loading Servers...</title>
+          <link rel="icon" href="/favicon.ico" />
         </Head>
         <Layout>
           <div className="min-h-[60vh] flex items-center justify-center">
@@ -86,6 +87,7 @@ export default function Servers() {
     <>
       <Head>
         <title>Your Servers - Musik Cafe</title>
+        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <Layout>

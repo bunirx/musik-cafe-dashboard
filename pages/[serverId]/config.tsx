@@ -265,6 +265,7 @@ export default function ServerConfig() {
     <>
       <Head>
         <title>Server Configuration - Musik Cafe</title>
+        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <Layout>
