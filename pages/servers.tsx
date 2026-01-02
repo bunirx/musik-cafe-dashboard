@@ -32,7 +32,8 @@ export default function Servers() {
       try {
         const user = JSON.parse(userData);
         setUserName(user.username || 'User');
-        setServers(user.guilds || []);
+        const sortedServers = (user.guilds || []).sort((a: Guild, b: Guild) => a.name.localeCompare(b.name));
+        setServers(sortedServers);
       } catch (err) {
         console.error('Error parsing user data:', err);
         setError('Failed to load user data');
