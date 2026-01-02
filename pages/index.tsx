@@ -7,9 +7,14 @@ const Home: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Musik Cafe - Discord Music Bot Dashboard</title>
-        <meta name="description" content="Manage your Musik Cafe bot with our powerful dashboard" />
+        <title>Musik Cafe Site</title>
+        <meta name="description" content="Manage your Discord music bot servers with a powerful, intuitive dashboard. Control settings, view statistics, and configure everything in one beautiful interface." />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta property="og:title" content="Musik Cafe Site" />
+        <meta property="og:description" content="Manage your Discord music bot servers with a powerful, intuitive dashboard. Control settings, view statistics, and configure everything in one beautiful interface." />
+        <meta property="og:image" content="/banana.png" />
+        <meta property="og:type" content="website" />
+        <meta property="theme-color" content="#00FFFF" />
         <link rel="icon" href="/banana.png?v=2" />
         <link rel="shortcut icon" href="/banana.png?v=2" />
       </Head>
