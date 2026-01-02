@@ -263,13 +263,6 @@ export default function ServerConfig() {
             </div>
           )}
 
-          {saved && (
-            <div className="bg-green-500/20 border border-green-500 rounded-2xl p-4 text-green-300 flex items-center gap-3">
-              <span>✅</span>
-              <span>Configuration saved successfully! Changes will take effect on the bot shortly.</span>
-            </div>
-          )}
-
           {error && (
             <div className="bg-red-500/20 border border-red-500 rounded-2xl p-4 text-red-300 flex items-center gap-3">
               <span>❌</span>
@@ -470,6 +463,13 @@ export default function ServerConfig() {
           >
             {saving ? 'Saving...' : 'Save Configuration'}
           </button>
+
+          {saved && (
+            <div className="bg-green-500/20 border border-green-500 rounded-2xl p-4 text-green-300 flex items-center gap-3">
+              <span>✅</span>
+              <span>Configuration saved successfully! Changes will take effect on the bot shortly.</span>
+            </div>
+          )}
 
           {/* Channel Selection Modal */}
           {showChannelModal && (
