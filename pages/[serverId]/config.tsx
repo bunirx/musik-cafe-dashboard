@@ -37,11 +37,11 @@ export default function ServerConfig() {
     if (saved) {
       const timer = setTimeout(() => {
         setSavedFading(true);
-      }, 3000);
+      }, 4000);
       const fadeTimer = setTimeout(() => {
         setSaved(false);
         setSavedFading(false);
-      }, 4000);
+      }, 5000);
       return () => {
         clearTimeout(timer);
         clearTimeout(fadeTimer);
@@ -127,8 +127,9 @@ export default function ServerConfig() {
       setSaving(true);
       setError('');
 
-      // Validate prefix
-      if (!config.defaultPrefix || config.defaultPrefix.length > 5) {
+      // Validate and trim prefix
+      const trimmedPrefix = (config.defaultPrefix || '').trim();
+      if (!trimmedPrefix || trimmedPrefix.length > 5) {
         setError('Prefix must be 1-5 characters');
         setSaving(false);
         return;
@@ -141,7 +142,7 @@ export default function ServerConfig() {
         },
         body: JSON.stringify({
           defaultVolume: config.defaultVolume,
-          defaultPrefix: config.defaultPrefix,
+          defaultPrefix: trimmedPrefix,
           djRoles: config.djRoles,
           musicChannels: config.musicChannels,
           voiceChannels: config.voiceChannels,
