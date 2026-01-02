@@ -56,7 +56,7 @@ export default function UserMenu() {
     <div className="relative" data-user-menu>
       <button
         onClick={() => setShowMenu(!showMenu)}
-        className="w-10 h-10 rounded-full bg-gradient-to-br from-aqua to-accent-blue flex items-center justify-center text-white font-bold hover:shadow-lg hover:shadow-aqua/50 transition-all hover:scale-110"
+        className="w-14 h-14 rounded-full bg-gradient-to-br from-aqua to-accent-blue flex items-center justify-center text-white font-bold hover:shadow-lg hover:shadow-aqua/50 transition-all hover:scale-110"
         title={userName}
       >
         {userAvatar ? (
@@ -66,7 +66,7 @@ export default function UserMenu() {
             className="w-full h-full rounded-full object-cover border-2 border-aqua"
           />
         ) : (
-          <span>{userName.charAt(0).toUpperCase()}</span>
+          <span className="text-xl">{userName.charAt(0).toUpperCase()}</span>
         )}
       </button>
 
@@ -80,8 +80,11 @@ export default function UserMenu() {
             }}
             className="w-full px-4 py-3 text-red-400 hover:bg-red-500/20 flex items-center gap-3 font-bold transition-colors text-left"
           >
-            {/* Replace with your image path - currently using red logout emoji as fallback */}
-            <span className="text-lg">🚪</span>
+            <img 
+              src="/logout-icon.png" 
+              alt="logout" 
+              className="w-5 h-5"
+            />
             <span>Log Out</span>
           </button>
         </div>
