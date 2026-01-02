@@ -153,7 +153,6 @@ export default function ServerConfig() {
       }
 
       setSaved(true);
-      setTimeout(() => setSaved(false), 3000);
     } catch (err) {
       setError('Failed to save configuration. Please try again.');
       console.error('Save error:', err);
