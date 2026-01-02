@@ -102,11 +102,16 @@ export default function Add() {
           <div className="bg-gradient-to-br from-accent-blue/10 to-aqua/10 border border-accent-blue/30 rounded-2xl p-6">
             <h3 className="text-lg font-bold text-accent-blue mb-3">📋 Required Permissions</h3>
             <ul className="space-y-2 text-gray-300 text-sm">
-              <li>✓ Send Messages - For responses and now playing info</li>
-              <li>✓ Embed Links - For styled messages</li>
-              <li>✓ Connect to Voice - To join voice channels</li>
-              <li>✓ Speak - To stream audio</li>
-              <li>✓ Manage Messages - For commands cleanup</li>
+              <li>✓ Send Messages</li>
+              <li>✓ Embed Links</li>
+              <li>✓ Read Message History</li>
+              <li>✓ Use External Emojis</li>
+              <li>✓ Bypass Slowmode</li>
+              <li>✓ View Channels</li>
+              <li>✓ Connect</li>
+              <li>✓ Speak</li>
+              <li>✓ Use Voice Activity</li>
+              <li>✓ Priority Speaker</li>
             </ul>
           </div>
         </div>
