@@ -54,6 +54,8 @@ export default function ServerConfig() {
         const configRes = await fetch(`/api/config/${serverId}`);
         const configData = await configRes.json();
         
+        console.log('Loaded config:', configData);
+        
         if (configData.config) {
           // Convert volume from percentage (0-100) to decimal (0-1) if needed
           let volume = configData.config.default_volume || configData.config.defaultVolume || 0.6;
@@ -62,12 +64,18 @@ export default function ServerConfig() {
             volume = volume / 100;
           }
           
+          const djRoles = configData.config.dj_roles || configData.config.djRoles || [];
+          const musicChannels = configData.config.music_channels || configData.config.musicChannels || [];
+          const voiceChannels = configData.config.voice_channels || configData.config.voiceChannels || [];
+          
+          console.log('Setting config with:', { djRoles, musicChannels, voiceChannels });
+          
           setConfig({
             defaultVolume: volume,
             defaultPrefix: configData.config.default_prefix || configData.config.defaultPrefix || '.',
-            djRoles: configData.config.dj_roles || configData.config.djRoles || [],
-            musicChannels: configData.config.music_channels || configData.config.musicChannels || [],
-            voiceChannels: configData.config.voice_channels || configData.config.voiceChannels || [],
+            djRoles: Array.isArray(djRoles) ? djRoles : [],
+            musicChannels: Array.isArray(musicChannels) ? musicChannels : [],
+            voiceChannels: Array.isArray(voiceChannels) ? voiceChannels : [],
           });
         }
 
@@ -76,6 +84,7 @@ export default function ServerConfig() {
           const serverRes = await fetch(`/api/server/${serverId}`);
           if (serverRes.ok) {
             const data = await serverRes.json();
+            console.log('Loaded server data:', data);
             setServerData({
               channels: data.channels || [],
               roles: data.roles || [],
@@ -323,10 +332,13 @@ export default function ServerConfig() {
               <div className="bg-gradient-to-br from-aqua/10 to-accent-blue/10 border border-aqua/30 rounded-2xl p-6">
                 <h2 className="text-xl font-bold text-aqua mb-4">🎭 DJ Roles</h2>
                 <div className="space-y-3">
-                  {config.djRoles.length > 0 ? (
+                  {config.djRoles && config.djRoles.length > 0 ? (
                     <div className="space-y-2">
                       {config.djRoles.map((roleId) => {
-                        const role = serverData.roles.find(r => r.id === roleId);
+                        const role = serverData.roles.find(r => {
+                          console.log(`Matching roleId=${roleId} (type: ${typeof roleId}) against r.id=${r.id} (type: ${typeof r.id})`, r.id === roleId);
+                          return r.id === roleId;
+                        });
                         return (
                           <div
                             key={roleId}
