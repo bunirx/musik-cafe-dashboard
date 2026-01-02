@@ -55,8 +55,15 @@ export default function ServerConfig() {
         const configData = await configRes.json();
         
         if (configData.config) {
+          // Convert volume from percentage (0-100) to decimal (0-1) if needed
+          let volume = configData.config.default_volume || configData.config.defaultVolume || 0.6;
+          // If volume is greater than 1, it's stored as percentage, convert to decimal
+          if (volume > 1) {
+            volume = volume / 100;
+          }
+          
           setConfig({
-            defaultVolume: configData.config.default_volume || configData.config.defaultVolume || 100,
+            defaultVolume: volume,
             defaultPrefix: configData.config.default_prefix || configData.config.defaultPrefix || '.',
             djRoles: configData.config.dj_roles || configData.config.djRoles || [],
             musicChannels: configData.config.music_channels || configData.config.musicChannels || [],
@@ -138,18 +145,22 @@ export default function ServerConfig() {
   };
 
   const handleConfirmChannels = () => {
-    const textChannels = serverData.channels
-      .filter(c => c.type === 'text' && selectedChannels.has(c.id))
-      .map(c => c.id);
-    const voiceChannels = serverData.channels
-      .filter(c => c.type === 'voice' && selectedChannels.has(c.id))
-      .map(c => c.id);
-
-    setConfig({
-      ...config,
-      musicChannels: textChannels,
-      voiceChannels: voiceChannels,
-    });
+    const newChannels = Array.from(selectedChannels);
+    
+    if (channelModalType === 'text') {
+      // Only update text channels, keep existing voice channels
+      setConfig({
+        ...config,
+        musicChannels: newChannels,
+      });
+    } else {
+      // Only update voice channels, keep existing text channels
+      setConfig({
+        ...config,
+        voiceChannels: newChannels,
+      });
+    }
+    
     setShowChannelModal(false);
     setSelectedChannels(new Set());
   };
@@ -263,15 +274,16 @@ export default function ServerConfig() {
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm text-gray-300 mb-2">
-                      Default Volume: {config.defaultVolume}%
+                      Default Volume: {Math.round(config.defaultVolume * 100)}%
                     </label>
                     <input
                       type="range"
                       min="0"
-                      max="100"
+                      max="1"
+                      step="0.01"
                       value={config.defaultVolume}
                       onChange={(e) =>
-                        setConfig({ ...config, defaultVolume: parseInt(e.target.value) })
+                        setConfig({ ...config, defaultVolume: parseFloat(e.target.value) })
                       }
                       className="w-full h-2 bg-darker-blue rounded-lg appearance-none cursor-pointer accent-aqua"
                     />
