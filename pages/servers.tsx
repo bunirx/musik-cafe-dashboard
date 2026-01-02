@@ -12,12 +12,21 @@ interface Guild {
   permissions: number;
 }
 
+interface User {
+  username: string;
+  avatar: string | null;
+  id: string;
+}
+
 export default function Servers() {
   const router = useRouter();
   const [servers, setServers] = useState<Guild[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [userName, setUserName] = useState('');
+  const [userAvatar, setUserAvatar] = useState<string | null>(null);
+  const [userId, setUserId] = useState('');
+  const [showMenu, setShowMenu] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('discord_token');
@@ -30,8 +39,12 @@ export default function Servers() {
     const userData = localStorage.getItem('discord_user');
     if (userData) {
       try {
-        const user = JSON.parse(userData);
+        const user: User = JSON.parse(userData);
         setUserName(user.username || 'User');
+        setUserId(user.id);
+        if (user.avatar) {
+          setUserAvatar(`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`);
+        }
         const sortedServers = (user.guilds || []).sort((a: Guild, b: Guild) => {
           // Custom sort: numbers first, then alphabets
           const aFirstChar = a.name[0] || '';
@@ -54,7 +67,31 @@ export default function Servers() {
     }
 
     setLoading(false);
+
+    // Close menu when clicking outside
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest('[data-avatar-menu]')) {
+        setShowMenu(false);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
   }, [router]);
+
+  const handleLogout = async () => {
+    // Clear all auth data
+    localStorage.removeItem('discord_token');
+    localStorage.removeItem('discord_user');
+    localStorage.removeItem('discord_refresh_token');
+    
+    // Clear session storage as well
+    sessionStorage.clear();
+    
+    // Redirect to login - user will see login page as if first time
+    router.push('/login');
+  };
 
   if (loading) {
     return (
@@ -81,6 +118,41 @@ export default function Servers() {
       </Head>
 
       <Layout>
+        {/* Avatar Menu - Top Right */}
+        <div className="fixed top-6 right-6 z-50" data-avatar-menu>
+          <button
+            onClick={() => setShowMenu(!showMenu)}
+            className="w-12 h-12 rounded-full bg-gradient-to-br from-aqua to-accent-blue flex items-center justify-center text-white font-bold hover:shadow-lg hover:shadow-aqua/50 transition-all hover:scale-110"
+            title={userName}
+          >
+            {userAvatar ? (
+              <img
+                src={userAvatar}
+                alt={userName}
+                className="w-full h-full rounded-full object-cover border-2 border-aqua"
+              />
+            ) : (
+              <span>{userName.charAt(0).toUpperCase()}</span>
+            )}
+          </button>
+
+          {/* Dropdown Menu */}
+          {showMenu && (
+            <div className="absolute top-16 right-0 mt-2 w-48 bg-gray-900 border border-red-500/50 rounded-xl shadow-2xl shadow-red-500/20 overflow-hidden animate-fadeIn">
+              <button
+                onClick={() => {
+                  handleLogout();
+                  setShowMenu(false);
+                }}
+                className="w-full px-4 py-3 text-red-400 hover:bg-red-500/20 flex items-center gap-3 font-bold transition-colors text-left"
+              >
+                <span className="text-lg">🚪</span>
+                <span>Log Out</span>
+              </button>
+            </div>
+          )}
+        </div>
+
         <div className="space-y-8">
           <div className="text-center space-y-4 mb-12">
             <h1 className="text-4xl font-bold gradient-text">Your Servers</h1>
