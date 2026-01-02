@@ -134,7 +134,6 @@ export default function Documentation() {
                 { icon: '📋', title: 'Queue Management', desc: 'Full queue control with shuffle & repeat' },
                 { icon: '⚙️', title: 'Server Config', desc: 'Customize prefix, DJ roles, and channels' },
                 { icon: '👥', title: 'DJ Roles', desc: 'Give DJ permissions to specific roles' },
-                { icon: '⏱️', title: 'Auto Leave', desc: 'Bot leaves automatically after inactivity' },
               ].map((feature, i) => (
                 <div
                   key={i}

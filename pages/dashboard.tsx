@@ -111,7 +111,6 @@ export default function Dashboard() {
                 '📋 Manage queue with ease',
                 '⚙️ Customize server settings',
                 '🎭 Set up DJ roles',
-                '⏱️ Auto-leave configuration',
               ].map((feature, i) => (
                 <div key={i} className="flex items-center gap-3 p-3 bg-darker-blue/50 rounded-xl">
                   <span className="text-xl">{feature.split(' ')[0]}</span>
