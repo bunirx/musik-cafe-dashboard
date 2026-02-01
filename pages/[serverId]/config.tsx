@@ -32,6 +32,7 @@ export default function ServerConfig() {
   const [savedFading, setSavedFading] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
+  const [botInServer, setBotInServer] = useState(true);
 
   useEffect(() => {
     if (saved) {
@@ -104,9 +105,16 @@ export default function ServerConfig() {
               channels: data.channels || [],
               roles: data.roles || [],
             });
+            setBotInServer(true);
+          } else if (serverRes.status === 404) {
+            // Bot is not in the server
+            setBotInServer(false);
+            setError('');
           }
         } catch (serverErr) {
           console.error('Failed to load server data:', serverErr);
+          // If we can't reach the server endpoint, the bot is likely not in the server
+          setBotInServer(false);
         }
       } catch (err) {
         console.error('Failed to load data:', err);
@@ -281,6 +289,37 @@ export default function ServerConfig() {
             </div>
           )}
 
+          {!loading && !botInServer && (
+            <div className="bg-yellow-500/20 border border-yellow-500 rounded-2xl p-6 text-yellow-300 space-y-4">
+              <div className="flex items-center gap-3">
+                <span className="text-3xl">⚠️</span>
+                <div>
+                  <h3 className="text-xl font-bold">Bot Not in Server</h3>
+                  <p className="text-sm text-yellow-200">The bot is not currently in this server. Please add it first to configure settings.</p>
+                </div>
+              </div>
+              <div className="flex gap-3">
+                <a
+                  href={`https://discord.com/oauth2/authorize?client_id=1455917162270294091&scope=bot%20applications.commands&permissions=4539334060756224&guild_id=${serverId}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-6 py-3 bg-gradient-to-r from-aqua to-accent-blue text-white font-bold rounded-xl hover:shadow-lg hover:shadow-aqua/50 transition-all"
+                >
+                  ➕ Add Bot to Server
+                </a>
+                <button
+                  onClick={() => {
+                    setBotInServer(true);
+                    window.location.reload();
+                  }}
+                  className="px-6 py-3 bg-yellow-500/20 border border-yellow-500 text-yellow-300 font-bold rounded-xl hover:bg-yellow-500/30 transition-all"
+                >
+                  🔄 Refresh
+                </button>
+              </div>
+            </div>
+          )}
+
           {error && (
             <div className="bg-red-500/20 border border-red-500 rounded-2xl p-4 text-red-300 flex items-center gap-3">
               <span>❌</span>
@@ -288,7 +327,7 @@ export default function ServerConfig() {
             </div>
           )}
 
-          {!loading && (
+          {!loading && botInServer && (
             <div className="space-y-6">
               {/* Volume Settings */}
               <div className="bg-gradient-to-br from-aqua/10 to-accent-blue/10 border border-aqua/30 rounded-2xl p-6">
