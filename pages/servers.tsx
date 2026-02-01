@@ -3,7 +3,6 @@ import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Link from 'next/link';
 import Layout from '@/components/Layout';
-import UserMenu from '@/components/UserMenu';
 
 interface Guild {
   id: string;
@@ -23,9 +22,11 @@ interface User {
 export default function Servers() {
   const router = useRouter();
   const [servers, setServers] = useState<Guild[]>([]);
+  const [filteredServers, setFilteredServers] = useState<Guild[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [userName, setUserName] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     const token = localStorage.getItem('discord_token');
@@ -55,6 +56,7 @@ export default function Servers() {
           return a.name.localeCompare(b.name);
         });
         setServers(sortedServers);
+        setFilteredServers(sortedServers);
       } catch (err) {
         console.error('Error parsing user data:', err);
         setError('Failed to load user data');
@@ -63,6 +65,34 @@ export default function Servers() {
 
     setLoading(false);
   }, [router]);
+
+  // Handle search with priority ranking
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    
+    if (!query.trim()) {
+      setFilteredServers(servers);
+      return;
+    }
+
+    const lowerQuery = query.toLowerCase();
+    
+    // Separate servers into two categories
+    const startsWith: Guild[] = [];
+    const contains: Guild[] = [];
+
+    servers.forEach((server) => {
+      const lowerName = server.name.toLowerCase();
+      if (lowerName.startsWith(lowerQuery)) {
+        startsWith.push(server);
+      } else if (lowerName.includes(lowerQuery)) {
+        contains.push(server);
+      }
+    });
+
+    // Combine: servers starting with query first, then those containing it
+    setFilteredServers([...startsWith, ...contains]);
+  };
 
   if (loading) {
     return (
@@ -98,12 +128,20 @@ export default function Servers() {
               Welcome, <span className="text-aqua font-bold">{userName}</span>
             </p>
             <p className="text-gray-400">Select a server to configure your bot</p>
-            
-            {/* User Menu - Below Servers Title */}
-            <div className="flex justify-center pt-4">
-              <UserMenu />
-            </div>
           </div>
+
+          {/* Search Box */}
+          {servers.length > 0 && (
+            <div className="mb-8">
+              <input
+                type="text"
+                placeholder="🔍 Search servers..."
+                value={searchQuery}
+                onChange={(e) => handleSearch(e.target.value)}
+                className="w-full px-6 py-3 bg-darker-blue/50 border border-aqua/30 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-aqua focus:bg-darker-blue/70 transition-all"
+              />
+            </div>
+          )}
 
           {error && (
             <div className="bg-red-500/20 border border-red-500 rounded-2xl p-4 text-red-300">
@@ -126,13 +164,23 @@ export default function Servers() {
                 </button>
               </Link>
             </div>
+          ) : filteredServers.length === 0 ? (
+            <div className="text-center py-20 space-y-6">
+              <div className="text-6xl">🔍</div>
+              <p className="text-xl text-gray-400">
+                No servers found with this name.
+              </p>
+              <p className="text-gray-500">
+                Try searching with different keywords.
+              </p>
+            </div>
           ) : (
             <div className="space-y-4">
               <div className="text-gray-400 text-sm">
-                Found <span className="text-aqua font-bold">{servers.length}</span> server{servers.length !== 1 ? 's' : ''}
+                Found <span className="text-aqua font-bold">{filteredServers.length}</span> server{filteredServers.length !== 1 ? 's' : ''}
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {servers.map((server) => {
+                {filteredServers.map((server) => {
                   // Generate a default icon if none exists
                   const initials = server.name
                     .split(' ')

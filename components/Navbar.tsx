@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useState } from 'react';
+import { SOCIAL_LINKS } from '@/config';
 
 export default function Navbar() {
   const router = useRouter();
@@ -49,6 +50,15 @@ export default function Navbar() {
                 </span>
               </Link>
             ))}
+            <a
+              href={SOCIAL_LINKS.vote}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-4 py-2 rounded-lg font-semibold transition-all cursor-pointer text-yellow-400 hover:bg-yellow-500/20 hover:text-yellow-300"
+              title="Vote for our bot"
+            >
+              🗳️ Vote
+            </a>
           </div>
 
           {/* Mobile Menu Button */}
@@ -78,6 +88,15 @@ export default function Navbar() {
                 </span>
               </Link>
             ))}
+            <a
+              href={SOCIAL_LINKS.vote}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block px-4 py-2 rounded-lg font-semibold transition-all cursor-pointer text-yellow-400 hover:bg-yellow-500/20"
+              title="Vote for our bot"
+            >
+              🗳️ Vote
+            </a>
           </div>
         )}
       </div>

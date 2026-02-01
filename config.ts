@@ -10,6 +10,7 @@ export const BOT_API_URL = process.env.NEXT_PUBLIC_BOT_API_URL || 'http://217.15
 
 // Social Links
 export const SOCIAL_LINKS = {
-  discord: 'https://discord.gg/d8uuYBf7Nh',
+  discord: 'https://discord.gg/FCUZd3UsW6',
   youtube: 'https://www.youtube.com/channel/UCRSv_s1Qppxt68oKoLeReng?sub_confirmation=1',
+  vote: 'https://top.gg/bot/1455917162270294091/vote',
 };

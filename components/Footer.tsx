@@ -38,6 +38,16 @@ export default function Footer() {
                   Dashboard
                 </a>
               </li>
+              <li>
+                <a
+                  href={SOCIAL_LINKS.vote}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-yellow-400 transition-colors flex items-center gap-2"
+                >
+                  🗳️ Vote
+                </a>
+              </li>
             </ul>
           </div>
 
