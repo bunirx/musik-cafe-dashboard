@@ -292,10 +292,10 @@ export default function ServerConfig() {
           {!loading && !botInServer && (
             <div className="bg-yellow-500/20 border border-yellow-500 rounded-2xl p-6 text-yellow-300 space-y-4">
               <div className="flex items-center gap-3">
-                <span className="text-3xl">⚠️</span>
+                <span className="text-3xl">🤖</span>
                 <div>
-                  <h3 className="text-xl font-bold">Bot Not in Server</h3>
-                  <p className="text-sm text-yellow-200">The bot is not currently in this server. Please add it first to configure settings.</p>
+                  <h3 className="text-xl font-bold">Bot Not Added to Server</h3>
+                  <p className="text-sm text-yellow-200">To configure this server, please add the bot first. You'll be able to manage all settings once the bot has been invited.</p>
                 </div>
               </div>
               <div className="flex gap-3">
@@ -513,13 +513,15 @@ export default function ServerConfig() {
           )}
 
           {/* Save Button */}
-          <button
-            onClick={handleSave}
-            disabled={saving || loading}
-            className="w-full py-4 bg-gradient-to-r from-aqua to-accent-blue text-white font-bold rounded-2xl hover:shadow-lg hover:shadow-aqua/50 transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {saving ? 'Saving...' : 'Save Configuration'}
-          </button>
+          {botInServer && (
+            <button
+              onClick={handleSave}
+              disabled={saving || loading}
+              className="w-full py-4 bg-gradient-to-r from-aqua to-accent-blue text-white font-bold rounded-2xl hover:shadow-lg hover:shadow-aqua/50 transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {saving ? 'Saving...' : 'Save Configuration'}
+            </button>
+          )}
 
           {saved && (
             <div className={`bg-green-500/20 border border-green-500 rounded-2xl p-4 text-green-300 flex items-center gap-3 transition-opacity duration-1000 ${
