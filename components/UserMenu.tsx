@@ -56,7 +56,7 @@ export default function UserMenu() {
     <div className="relative" data-user-menu>
       <button
         onClick={() => setShowMenu(!showMenu)}
-        className="w-20 h-20 rounded-full bg-gradient-to-br from-aqua to-accent-blue flex items-center justify-center text-white font-bold hover:shadow-lg hover:shadow-aqua/50 transition-all hover:scale-110"
+        className="w-14 h-14 rounded-full bg-gradient-to-br from-aqua to-accent-blue flex items-center justify-center text-white font-bold hover:shadow-lg hover:shadow-aqua/50 transition-all hover:scale-110"
         title={userName}
       >
         {userAvatar ? (
