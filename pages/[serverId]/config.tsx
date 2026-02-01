@@ -294,7 +294,7 @@ export default function ServerConfig() {
               <div className="flex items-center gap-3">
                 <span className="text-3xl">🤖</span>
                 <div>
-                  <h3 className="text-xl font-bold">Bot is not Added to this Server!</h3>
+                  <h3 className="text-xl font-bold">⚠️ The bot isn't added to this server yet.</h3>
                   <p className="text-sm text-yellow-200">To configure this server, please add the bot first. You'll be able to manage all settings once the bot has been invited.</p>
                 </div>
               </div>

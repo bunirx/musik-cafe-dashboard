@@ -145,7 +145,7 @@ export default function Servers() {
             <div className="mb-8">
               <input
                 type="text"
-                placeholder="Search servers by name or ID..."
+                placeholder="🔍 Search servers by name or ID..."
                 value={searchQuery}
                 onChange={(e) => handleSearch(e.target.value)}
                 className="w-full px-6 py-3 bg-darker-blue/50 border border-aqua/30 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-aqua focus:bg-darker-blue/70 transition-all"
