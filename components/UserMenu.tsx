@@ -12,6 +12,7 @@ export default function UserMenu() {
   const [userName, setUserName] = useState('');
   const [userAvatar, setUserAvatar] = useState<string | null>(null);
   const [showMenu, setShowMenu] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     const userData = localStorage.getItem('discord_user');
@@ -19,12 +20,16 @@ export default function UserMenu() {
       try {
         const user: User = JSON.parse(userData);
         setUserName(user.username || 'User');
+        setIsLoggedIn(true);
         if (user.avatar) {
           setUserAvatar(`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`);
         }
       } catch (err) {
         console.error('Error parsing user data:', err);
+        setIsLoggedIn(false);
       }
+    } else {
+      setIsLoggedIn(false);
     }
 
     // Close menu when clicking outside
@@ -51,6 +56,11 @@ export default function UserMenu() {
     // Redirect to login
     router.push('/login');
   };
+
+  // Don't render anything if user is not logged in
+  if (!isLoggedIn) {
+    return null;
+  }
 
   return (
     <div className="relative" data-user-menu>
