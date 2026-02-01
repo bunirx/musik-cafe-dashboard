@@ -70,6 +70,15 @@ export default function ServerConfig() {
 
         // Load config from bot
         const configRes = await fetch(`/api/config/${serverId}`);
+        
+        // Check if config request failed (bot might not be in server)
+        if (!configRes.ok) {
+          if (configRes.status === 404) {
+            setBotInServer(false);
+          }
+          throw new Error('Failed to load configuration');
+        }
+
         const configData = await configRes.json();
         
         // Support both wrapped and unwrapped responses
