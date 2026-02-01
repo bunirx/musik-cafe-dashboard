@@ -72,7 +72,7 @@ export default function UserMenu() {
 
       {/* Dropdown Menu */}
       {showMenu && (
-        <div className="absolute bottom-full mb-2 right-0 w-48 bg-gray-900 border border-red-500/50 rounded-xl shadow-2xl shadow-red-500/20 overflow-hidden animate-fadeIn">
+        <div className="absolute top-full mt-2 right-0 w-48 bg-gray-900 border border-red-500/50 rounded-xl shadow-2xl shadow-red-500/20 overflow-hidden animate-fadeIn z-50">
           <button
             onClick={() => {
               handleLogout();

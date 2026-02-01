@@ -2,7 +2,6 @@ import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Layout from '@/components/Layout';
-import UserMenu from '@/components/UserMenu';
 
 interface ServerConfig {
   defaultVolume: number;
@@ -273,11 +272,6 @@ export default function ServerConfig() {
           <div className="text-center space-y-2 mb-8 relative pb-12">
             <h1 className="text-4xl font-bold gradient-text">Server Configuration</h1>
             <p className="text-gray-400">Server ID: {serverId}</p>
-            
-            {/* User Menu - Below Title */}
-            <div className="flex justify-center pt-4">
-              <UserMenu />
-            </div>
           </div>
 
           {loading && (

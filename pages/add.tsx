@@ -1,6 +1,5 @@
 import Head from 'next/head';
 import Layout from '@/components/Layout';
-import UserMenu from '@/components/UserMenu';
 
 export default function Add() {
   const botInviteUrl = `https://discord.com/oauth2/authorize?client_id=1455917162270294091&scope=bot%20applications.commands&permissions=4539334060756224`;
@@ -17,11 +16,6 @@ export default function Add() {
           <div className="text-center space-y-2 mb-12 relative pb-12">
             <h1 className="text-4xl font-bold gradient-text">Add Musik Cafe Bot</h1>
             <p className="text-gray-400">Invite the bot to your Discord server</p>
-            
-            {/* User Menu - Below Title */}
-            <div className="flex justify-center pt-4">
-              <UserMenu />
-            </div>
           </div>
 
           {/* Steps */}
