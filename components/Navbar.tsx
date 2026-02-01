@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useState } from 'react';
 import { SOCIAL_LINKS } from '@/config';
+import UserMenu from '@/components/UserMenu';
 
 export default function Navbar() {
   const router = useRouter();
@@ -36,7 +37,7 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-2">
+          <div className="hidden md:flex items-center gap-4">
             <a
               href={SOCIAL_LINKS.vote}
               target="_blank"
@@ -59,6 +60,7 @@ export default function Navbar() {
                 </span>
               </Link>
             ))}
+            <UserMenu />
           </div>
 
           {/* Mobile Menu Button */}
