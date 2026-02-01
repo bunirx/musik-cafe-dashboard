@@ -66,7 +66,7 @@ export default function Servers() {
     setLoading(false);
   }, [router]);
 
-  // Handle search with priority ranking
+  // Handle search with priority ranking (by name and ID)
   const handleSearch = (query: string) => {
     setSearchQuery(query);
     
@@ -77,21 +77,31 @@ export default function Servers() {
 
     const lowerQuery = query.toLowerCase();
     
-    // Separate servers into two categories
+    // Separate servers into categories
+    const exactIdMatch: Guild[] = [];
     const startsWith: Guild[] = [];
     const contains: Guild[] = [];
 
     servers.forEach((server) => {
       const lowerName = server.name.toLowerCase();
-      if (lowerName.startsWith(lowerQuery)) {
+      const serverId = server.id;
+      
+      // Check if ID matches exactly
+      if (serverId === query) {
+        exactIdMatch.push(server);
+      }
+      // Check if name starts with query
+      else if (lowerName.startsWith(lowerQuery)) {
         startsWith.push(server);
-      } else if (lowerName.includes(lowerQuery)) {
+      }
+      // Check if name contains query or ID contains query
+      else if (lowerName.includes(lowerQuery) || serverId.includes(query)) {
         contains.push(server);
       }
     });
 
-    // Combine: servers starting with query first, then those containing it
-    setFilteredServers([...startsWith, ...contains]);
+    // Combine: exact ID match first, then names starting with query, then others
+    setFilteredServers([...exactIdMatch, ...startsWith, ...contains]);
   };
 
   if (loading) {
@@ -135,7 +145,7 @@ export default function Servers() {
             <div className="mb-8">
               <input
                 type="text"
-                placeholder="🔍 Search servers..."
+                placeholder="Search servers by name or ID..."
                 value={searchQuery}
                 onChange={(e) => handleSearch(e.target.value)}
                 className="w-full px-6 py-3 bg-darker-blue/50 border border-aqua/30 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-aqua focus:bg-darker-blue/70 transition-all"
