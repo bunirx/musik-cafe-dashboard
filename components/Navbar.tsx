@@ -37,6 +37,15 @@ export default function Navbar() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-2">
+            <a
+              href={SOCIAL_LINKS.vote}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-4 py-2 rounded-lg font-semibold transition-all cursor-pointer text-yellow-400 hover:bg-yellow-500/20 hover:text-yellow-300"
+              title="Vote for our bot"
+            >
+              🗳️ Vote
+            </a>
             {navItems.map(({ path, label }) => (
               <Link key={path} href={path}>
                 <span
@@ -50,15 +59,6 @@ export default function Navbar() {
                 </span>
               </Link>
             ))}
-            <a
-              href={SOCIAL_LINKS.vote}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-4 py-2 rounded-lg font-semibold transition-all cursor-pointer text-yellow-400 hover:bg-yellow-500/20 hover:text-yellow-300"
-              title="Vote for our bot"
-            >
-              🗳️ Vote
-            </a>
           </div>
 
           {/* Mobile Menu Button */}
@@ -75,6 +75,15 @@ export default function Navbar() {
         {/* Mobile Navigation */}
         {mobileMenuOpen && (
           <div className="md:hidden mt-4 space-y-2 pb-4">
+            <a
+              href={SOCIAL_LINKS.vote}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block px-4 py-2 rounded-lg font-semibold transition-all cursor-pointer text-yellow-400 hover:bg-yellow-500/20"
+              title="Vote for our bot"
+            >
+              🗳️ Vote
+            </a>
             {navItems.map(({ path, label }) => (
               <Link key={path} href={path}>
                 <span
@@ -88,15 +97,6 @@ export default function Navbar() {
                 </span>
               </Link>
             ))}
-            <a
-              href={SOCIAL_LINKS.vote}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block px-4 py-2 rounded-lg font-semibold transition-all cursor-pointer text-yellow-400 hover:bg-yellow-500/20"
-              title="Vote for our bot"
-            >
-              🗳️ Vote
-            </a>
           </div>
         )}
       </div>

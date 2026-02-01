@@ -43,9 +43,9 @@ export default function Footer() {
                   href={SOCIAL_LINKS.vote}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-yellow-400 transition-colors flex items-center gap-2"
+                  className="hover:text-yellow-400 transition-colors"
                 >
-                  🗳️ Vote
+                  Vote
                 </a>
               </li>
             </ul>
