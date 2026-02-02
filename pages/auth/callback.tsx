@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Layout from '@/components/Layout';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 export default function AuthCallback() {
   const router = useRouter();
@@ -56,8 +57,8 @@ export default function AuthCallback() {
           <div className="text-center space-y-6">
             {loading && !error ? (
               <>
-                <div className="animate-spin inline-block">
-                  <div className="text-6xl">🔄</div>
+                <div className="flex justify-center">
+                  <div className="w-16 h-16 border-4 border-aqua/30 border-t-aqua rounded-full animate-spin" />
                 </div>
                 <h1 className="text-3xl font-bold gradient-text">Authenticating</h1>
                 <p className="text-gray-400 text-lg">Verifying your Discord account...</p>
