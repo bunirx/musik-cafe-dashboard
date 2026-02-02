@@ -17,11 +17,6 @@ interface ServerData {
   roles: Array<{ id: string; name: string }>;
 }
 
-interface ServerInfo {
-  name: string;
-  icon: string | null;
-}
-
 export default function ServerConfig() {
   const router = useRouter();
   const { serverId } = router.query;
@@ -33,13 +28,14 @@ export default function ServerConfig() {
     voiceChannels: [],
   });
   const [serverData, setServerData] = useState<ServerData>({ channels: [], roles: [] });
-  const [serverInfo, setServerInfo] = useState<ServerInfo>({ name: '', icon: null });
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [savedFading, setSavedFading] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
   const [botInServer, setBotInServer] = useState(true);
+  const [serverName, setServerName] = useState('');
+  const [serverIcon, setServerIcon] = useState<string | null>(null);
 
   useEffect(() => {
     if (saved) {
@@ -68,29 +64,29 @@ export default function ServerConfig() {
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
+    // Load server name and icon from localStorage
+    const userData = localStorage.getItem('discord_user');
+    if (userData && serverId) {
+      try {
+        const user: any = JSON.parse(userData);
+        const guild = user.guilds?.find((g: any) => g.id === serverId);
+        if (guild) {
+          setServerName(guild.name);
+          setServerIcon(guild.icon || null);
+        }
+      } catch (err) {
+        console.error('Error loading server info:', err);
+      }
+    }
+  }, [serverId]);
+
+  useEffect(() => {
     if (!serverId) return;
 
     const loadData = async () => {
       try {
         setLoading(true);
         setError('');
-
-        // Get server info from localStorage
-        const guildsStr = localStorage.getItem('user_guilds');
-        if (guildsStr) {
-          try {
-            const guilds = JSON.parse(guildsStr);
-            const guild = guilds.find((g: any) => g.id === serverId);
-            if (guild) {
-              setServerInfo({
-                name: guild.name || 'Unknown Server',
-                icon: guild.icon || null,
-              });
-            }
-          } catch (e) {
-            console.error('Failed to parse guilds from localStorage:', e);
-          }
-        }
 
         // Load config from bot
         const configRes = await fetch(`/api/config/${serverId}`);
@@ -284,9 +280,37 @@ export default function ServerConfig() {
         setNewRoleName('');
         setShowCreateRole(false);
       } else {
-        setError('Failed to create role');
-      }
-    } catch (err) {
+        setError('Failed to create role');4 mb-8">
+            {serverName && (
+              <div className="flex flex-col items-center gap-4">
+                <div className="w-20 h-20 rounded-xl bg-gradient-to-br from-aqua to-accent-blue flex items-center justify-center text-white font-bold text-2xl shadow-lg">
+                  {serverIcon ? (
+                    <img
+                      src={`https://cdn.discordapp.com/icons/${serverId}/${serverIcon}.png`}
+                      alt={serverName}
+                      className="w-full h-full rounded-xl object-cover"
+                    />
+                  ) : (
+                    serverName
+                      .split(' ')
+                      .map((word) => word[0])
+                      .join('')
+                      .toUpperCase()
+                      .slice(0, 2)
+                  )}
+                </div>
+                <div>
+                  <h1 className="text-4xl font-bold gradient-text">{serverName}</h1>
+                  <p className="text-gray-400 mt-2">Server ID: {serverId}</p>
+                </div>
+              </div>
+            )}
+            {!serverName && (
+              <div className="space-y-2">
+                <h1 className="text-4xl font-bold gradient-text">Server Configuration</h1>
+                <p className="text-gray-400">Server ID: {serverId}</p>
+              </div>
+            )}
       setError('Failed to create role');
       console.error('Create role error:', err);
     }
@@ -301,21 +325,7 @@ export default function ServerConfig() {
 
       <Layout>
         <div className="space-y-8 max-w-2xl">
-          <div className="text-center space-y-4 mb-8">
-            {/* Server Avatar */}
-            {serverInfo.icon && (
-              <div className="flex justify-center">
-                <img
-                  src={`https://cdn.discordapp.com/icons/${serverId}/${serverInfo.icon}.png`}
-                  alt={serverInfo.name}
-                  className="w-24 h-24 rounded-full border-2 border-aqua shadow-lg"
-                />
-              </div>
-            )}
-            {/* Server Name */}
-            {serverInfo.name && (
-              <h2 className="text-2xl font-bold text-aqua">{serverInfo.name}</h2>
-            )}
+          <div className="text-center space-y-2 mb-8 relative pb-12">
             <h1 className="text-4xl font-bold gradient-text">Server Configuration</h1>
             <p className="text-gray-400">Server ID: {serverId}</p>
           </div>
