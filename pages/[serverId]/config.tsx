@@ -17,6 +17,11 @@ interface ServerData {
   roles: Array<{ id: string; name: string }>;
 }
 
+interface ServerInfo {
+  name: string;
+  icon: string | null;
+}
+
 export default function ServerConfig() {
   const router = useRouter();
   const { serverId } = router.query;
@@ -28,6 +33,7 @@ export default function ServerConfig() {
     voiceChannels: [],
   });
   const [serverData, setServerData] = useState<ServerData>({ channels: [], roles: [] });
+  const [serverInfo, setServerInfo] = useState<ServerInfo>({ name: '', icon: null });
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [savedFading, setSavedFading] = useState(false);
@@ -105,6 +111,11 @@ export default function ServerConfig() {
             setServerData({
               channels: data.channels || [],
               roles: data.roles || [],
+            // Set server info
+            setServerInfo({
+              name: data.guild_name || data.name || 'Unknown Server',
+              icon: data.guild_icon || data.icon || null,
+            });
             });
             setBotInServer(true);
           } else if (serverRes.status === 404) {
@@ -278,7 +289,21 @@ export default function ServerConfig() {
 
       <Layout>
         <div className="space-y-8 max-w-2xl">
-          <div className="text-center space-y-2 mb-8 relative pb-12">
+          <div className="text-center space-y-4 mb-8">
+            {/* Server Avatar */}
+            {serverInfo.icon && (
+              <div className="flex justify-center">
+                <img
+                  src={`https://cdn.discordapp.com/icons/${serverId}/${serverInfo.icon}.png`}
+                  alt={serverInfo.name}
+                  className="w-24 h-24 rounded-full border-2 border-aqua shadow-lg"
+                />
+              </div>
+            )}
+            {/* Server Name */}
+            {serverInfo.name && (
+              <h2 className="text-2xl font-bold text-aqua">{serverInfo.name}</h2>
+            )}
             <h1 className="text-4xl font-bold gradient-text">Server Configuration</h1>
             <p className="text-gray-400">Server ID: {serverId}</p>
           </div>
