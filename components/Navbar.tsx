@@ -76,30 +76,32 @@ export default function Navbar() {
 
         {/* Mobile Navigation */}
         {mobileMenuOpen && (
-          <div className="md:hidden mt-4 space-y-2 pb-4">
-            <a
-              href={SOCIAL_LINKS.vote}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block px-4 py-2 rounded-lg font-semibold transition-all cursor-pointer text-yellow-400 hover:bg-yellow-500/20"
-              title="Vote for our bot"
-            >
-              🗳️ Vote
-            </a>
-            {navItems.map(({ path, label }) => (
-              <Link key={path} href={path}>
-                <span
-                  className={`block px-4 py-2 rounded-lg font-semibold transition-all cursor-pointer ${
-                    isActive(path)
-                      ? 'bg-gradient-to-r from-aqua to-accent-blue text-white'
-                      : 'text-gray-300 hover:bg-aqua/10'
-                  }`}
-                >
-                  {label}
-                </span>
-              </Link>
-            ))}
-            <div className="border-t border-aqua/20 pt-2 mt-2">
+          <div className="md:hidden mt-4 pb-4">
+            <div className="space-y-2">
+              <a
+                href={SOCIAL_LINKS.vote}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block px-4 py-2 rounded-lg font-semibold transition-all cursor-pointer text-yellow-400 hover:bg-yellow-500/20"
+                title="Vote for our bot"
+              >
+                🗳️ Vote
+              </a>
+              {navItems.map(({ path, label }) => (
+                <Link key={path} href={path}>
+                  <span
+                    className={`block px-4 py-2 rounded-lg font-semibold transition-all cursor-pointer ${
+                      isActive(path)
+                        ? 'bg-gradient-to-r from-aqua to-accent-blue text-white'
+                        : 'text-gray-300 hover:bg-aqua/10'
+                    }`}
+                  >
+                    {label}
+                  </span>
+                </Link>
+              ))}
+            </div>
+            <div className="border-t border-aqua/20 pt-4 mt-4 flex justify-center">
               <UserMenu />
             </div>
           </div>
