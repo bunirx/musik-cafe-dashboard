@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Layout from '@/components/Layout';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 interface ServerConfig {
   defaultVolume: number;
@@ -70,15 +71,6 @@ export default function ServerConfig() {
 
         // Load config from bot
         const configRes = await fetch(`/api/config/${serverId}`);
-        
-        // Check if config request failed (bot might not be in server)
-        if (!configRes.ok) {
-          if (configRes.status === 404) {
-            setBotInServer(false);
-          }
-          throw new Error('Failed to load configuration');
-        }
-
         const configData = await configRes.json();
         
         // Support both wrapped and unwrapped responses
@@ -292,10 +284,7 @@ export default function ServerConfig() {
           </div>
 
           {loading && (
-            <div className="bg-blue-500/20 border border-blue-500 rounded-2xl p-4 text-blue-300 flex items-center gap-3">
-              <span>⏳</span>
-              <span>Loading configuration...</span>
-            </div>
+            <LoadingSpinner message="Loading configuration..." />
           )}
 
           {!loading && !botInServer && (

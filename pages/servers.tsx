@@ -112,12 +112,7 @@ export default function Servers() {
           <link rel="icon" href="/banana.png?v=2" />
         </Head>
         <Layout>
-          <div className="min-h-[60vh] flex items-center justify-center">
-            <div className="text-center space-y-4">
-              <div className="animate-spin text-6xl">⏳</div>
-              <p className="text-aqua font-bold">Loading your servers...</p>
-            </div>
-          </div>
+          <LoadingSpinner message="Loading your servers..." fullScreen />
         </Layout>
       </>
     );
