@@ -280,7 +280,24 @@ export default function ServerConfig() {
         setNewRoleName('');
         setShowCreateRole(false);
       } else {
-        setError('Failed to create role');4 mb-8">
+        setError('Failed to create role');
+      }
+    } catch (err: any) {
+      setError('Failed to create role');
+      console.error('Create role error:', err);
+    }
+  };
+
+  return (
+    <>
+      <Head>
+        <title>Server Configuration - Musik Cafe</title>
+        <link rel="icon" href="/banana.png?v=2" />
+      </Head>
+
+      <Layout>
+        <div className="space-y-8 max-w-2xl">
+          <div className="text-center space-y-4 mb-8">
             {serverName && (
               <div className="flex flex-col items-center gap-4">
                 <div className="w-20 h-20 rounded-xl bg-gradient-to-br from-aqua to-accent-blue flex items-center justify-center text-white font-bold text-2xl shadow-lg">
@@ -311,23 +328,6 @@ export default function ServerConfig() {
                 <p className="text-gray-400">Server ID: {serverId}</p>
               </div>
             )}
-      setError('Failed to create role');
-      console.error('Create role error:', err);
-    }
-  };
-
-  return (
-    <>
-      <Head>
-        <title>Server Configuration - Musik Cafe</title>
-        <link rel="icon" href="/banana.png?v=2" />
-      </Head>
-
-      <Layout>
-        <div className="space-y-8 max-w-2xl">
-          <div className="text-center space-y-2 mb-8 relative pb-12">
-            <h1 className="text-4xl font-bold gradient-text">Server Configuration</h1>
-            <p className="text-gray-400">Server ID: {serverId}</p>
           </div>
 
           {loading && (
