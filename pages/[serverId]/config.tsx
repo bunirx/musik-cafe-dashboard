@@ -75,6 +75,23 @@ export default function ServerConfig() {
         setLoading(true);
         setError('');
 
+        // Get server info from localStorage
+        const guildsStr = localStorage.getItem('user_guilds');
+        if (guildsStr) {
+          try {
+            const guilds = JSON.parse(guildsStr);
+            const guild = guilds.find((g: any) => g.id === serverId);
+            if (guild) {
+              setServerInfo({
+                name: guild.name || 'Unknown Server',
+                icon: guild.icon || null,
+              });
+            }
+          } catch (e) {
+            console.error('Failed to parse guilds from localStorage:', e);
+          }
+        }
+
         // Load config from bot
         const configRes = await fetch(`/api/config/${serverId}`);
         const configData = await configRes.json();
@@ -111,11 +128,6 @@ export default function ServerConfig() {
             setServerData({
               channels: data.channels || [],
               roles: data.roles || [],
-            });
-            // Set server info
-            setServerInfo({
-              name: data.guild_name || data.name || 'Unknown Server',
-              icon: data.guild_icon || data.icon || null,
             });
             setBotInServer(true);
           } else if (serverRes.status === 404) {
