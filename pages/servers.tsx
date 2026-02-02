@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Link from 'next/link';
 import Layout from '@/components/Layout';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 interface Guild {
   id: string;
