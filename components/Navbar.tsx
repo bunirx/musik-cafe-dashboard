@@ -99,6 +99,9 @@ export default function Navbar() {
                 </span>
               </Link>
             ))}
+            <div className="border-t border-aqua/20 pt-2 mt-2">
+              <UserMenu />
+            </div>
           </div>
         )}
       </div>
