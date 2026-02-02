@@ -111,11 +111,11 @@ export default function ServerConfig() {
             setServerData({
               channels: data.channels || [],
               roles: data.roles || [],
+            });
             // Set server info
             setServerInfo({
               name: data.guild_name || data.name || 'Unknown Server',
               icon: data.guild_icon || data.icon || null,
-            });
             });
             setBotInServer(true);
           } else if (serverRes.status === 404) {
