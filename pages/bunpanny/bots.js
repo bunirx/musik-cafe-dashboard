@@ -13,21 +13,23 @@ export default function BunpannyBots() {
   const [botToken, setBotToken] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const token = typeof window !== 'undefined' ? localStorage.getItem('bunpanel_token') : null;
-
   useEffect(() => {
+    const token = localStorage.getItem('bunpanel_token');
     if (!token) {
       router.push('/bunpanny/login');
       return;
     }
 
     const userData = localStorage.getItem('bunpanel_user');
-    setUser(JSON.parse(userData));
-    loadBots();
-  }, [router, token]);
+    if (userData) {
+      setUser(JSON.parse(userData));
+      loadBots();
+    }
+  }, [router]);
 
   const loadBots = async () => {
     try {
+      const token = localStorage.getItem('bunpanel_token');
       const { data } = await axios.get(`${API_URL}/api/bots`, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -42,6 +44,7 @@ export default function BunpannyBots() {
     setLoading(true);
 
     try {
+      const token = localStorage.getItem('bunpanel_token');
       await axios.post(
         `${API_URL}/api/bots`,
         { name: botName, token: botToken },

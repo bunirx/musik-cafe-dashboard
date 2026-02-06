@@ -11,27 +11,32 @@ export default function BunpannyAdmin() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const token = typeof window !== 'undefined' ? localStorage.getItem('bunpanel_token') : null;
-
   useEffect(() => {
+    const token = localStorage.getItem('bunpanel_token');
     if (!token) {
       router.push('/bunpanny/login');
       return;
     }
 
-    const userData = JSON.parse(localStorage.getItem('bunpanel_user'));
+    const userData = localStorage.getItem('bunpanel_user');
+    if (!userData) {
+      router.push('/bunpanny/login');
+      return;
+    }
     
-    if (userData?.role !== 'admin') {
+    const parsedUser = JSON.parse(userData);
+    if (parsedUser?.role !== 'admin') {
       router.push('/bunpanny/dashboard');
       return;
     }
 
-    setUser(userData);
+    setUser(parsedUser);
     loadAdminData();
-  }, [router, token]);
+  }, [router]);
 
   const loadAdminData = async () => {
     try {
+      const token = localStorage.getItem('bunpanel_token');
       const [statsRes, usersRes] = await Promise.all([
         axios.get(`${API_URL}/api/admin/stats`, {
           headers: { Authorization: `Bearer ${token}` }
