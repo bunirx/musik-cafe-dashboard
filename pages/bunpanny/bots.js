@@ -33,9 +33,10 @@ export default function BunpannyBots() {
       const { data } = await axios.get(`${API_URL}/api/bots`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      setBots(data);
+      setBots(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error('Failed to load bots:', err);
+      setBots([]);
     }
   };
 
