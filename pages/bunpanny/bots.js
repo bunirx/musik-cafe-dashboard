@@ -120,21 +120,31 @@ export default function BunpannyBots() {
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-slate-800 rounded-lg p-8 w-full max-w-md border border-slate-700">
               <h2 className="text-2xl font-bold text-white mb-4">Create New Bot</h2>
-              <form onSubmit={createBot} className="space-y-4">
+              {/* Disable browser autofill: form autocomplete off + dummy hidden fields + non-standard input names */}
+              <form onSubmit={createBot} className="space-y-4" autoComplete="off">
+                <input name="__dummy_user" type="text" autoComplete="username" style={{ display: 'none' }} />
+                <input name="__dummy_pass" type="password" autoComplete="new-password" style={{ display: 'none' }} />
+
                 <input
+                  name="bot_name_field"
                   type="text"
                   placeholder="Bot Name"
                   value={botName}
                   onChange={(e) => setBotName(e.target.value)}
                   className="w-full bg-slate-700 border border-slate-600 rounded px-4 py-2 text-white"
+                  autoComplete="off"
                   required
                 />
                 <input
-                  type="password"
+                  name="bot_secret_field"
+                  type="text"
                   placeholder="Discord Token"
                   value={botToken}
                   onChange={(e) => setBotToken(e.target.value)}
                   className="w-full bg-slate-700 border border-slate-600 rounded px-4 py-2 text-white"
+                  autoComplete="new-password"
+                  spellCheck={false}
+                  inputMode="text"
                   required
                 />
                 <div className="flex gap-2">
