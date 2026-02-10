@@ -6,7 +6,7 @@ export const DISCORD_CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET || '';
 export const DISCORD_REDIRECT_URI = process.env.NEXT_PUBLIC_DISCORD_REDIRECT_URI || 'https://www.musik-cafe.site/auth/callback';
 
 // Bot API configuration
-export const BOT_API_URL = process.env.NEXT_PUBLIC_BOT_API_URL || 'http://217.154.212.66:10340';
+export const BOT_API_URL = process.env.NEXT_PUBLIC_BOT_API_URL || 'http://in1.galacticphase.fun:25570';
 
 // Social Links
 export const SOCIAL_LINKS = {
